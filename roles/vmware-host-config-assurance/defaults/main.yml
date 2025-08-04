@@ -1,0 +1,15 @@
+---
+# defaults file for vmware-host-config-assurance
+
+# Configuration assurance mode (true = check only, false = enforce)
+check_mode: true
+
+# vCenter connection details
+vcenter_hostname: vcenter.lab.local
+vcenter_username: "{{ lookup('env', 'VCENTER_USERNAME') }}"
+vcenter_password: "{{ lookup('env', 'VCENTER_PASSWORD') }}"
+datacenter_name: "ha-datacenter"
+
+# NTP configuration
+ntp_servers:
+  - 123.123.123.123
