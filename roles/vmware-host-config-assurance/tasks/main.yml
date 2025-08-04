@@ -1,0 +1,10 @@
+---
+# tasks file for vmware-host-config-assurance
+
+- name: Discover ESXi hosts from vCenter
+  include_tasks: discover_hosts.yml
+  when: inventory_hostname == 'localhost'
+
+- name: Include NTP configuration check
+  include_tasks: ntp_check.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])

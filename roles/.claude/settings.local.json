@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ansible-playbook:*)",
+      "Bash(export VCENTER_USERNAME=\"account@administrator.local\")",
+      "Bash(export VCENTER_PASSWORD=\"Go2atc4labs!\")",
+      "Bash(ansible-galaxy:*)",
+      "Bash(ansible-doc:*)",
+      "Bash(export VCENTER_USERNAME=\"administrator@vsphere.local\")",
+      "Bash(pip show:*)",
+      "Bash(pip install:*)"
+    ],
+    "deny": []
+  }
+}

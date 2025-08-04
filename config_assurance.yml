@@ -1,0 +1,18 @@
+---
+- name: VMware Host Configuration Assurance - Discover Hosts
+  hosts: localhost
+  gather_facts: false
+  environment:
+    VCENTER_USERNAME: "administrator@vsphere.local"
+    VCENTER_PASSWORD: ""
+  roles:
+    - vmware-host-config-assurance
+
+- name: Run configuration checks on discovered hosts
+  hosts: discovered_esxi_hosts
+  gather_facts: false
+  environment:
+    VCENTER_USERNAME: "administrator@vsphere.local"
+    VCENTER_PASSWORD: ""
+  roles:
+    - vmware-host-config-assurance
