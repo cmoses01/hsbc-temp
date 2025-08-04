@@ -1,0 +1,20 @@
+---
+- name: Gather cluster information from default datacenter
+  community.vmware.vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "Datacenter"
+    validate_certs: false
+  register: cluster_info
+  delegate_to: localhost
+
+- name: Add discovered ESXi hosts to inventory
+  add_host:
+    hostname: "{{ host.name }}"
+    ansible_host: "{{ host.name }}"
+    groups: discovered_esxi_hosts
+  loop: "{{ cluster_info.clusters | dict2items | map(attribute='value.hosts') | flatten }}"
+  loop_control:
+    loop_var: host
+  delegate_to: localhost
