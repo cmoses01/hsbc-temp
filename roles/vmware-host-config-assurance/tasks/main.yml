@@ -8,3 +8,12 @@
 - name: Include NTP configuration check
   include_tasks: ntp_check.yml
   when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+
+
+- name: Include Lockdown Mode configuration check
+  include_tasks: lockdown_mode_check.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+
+
+
+
