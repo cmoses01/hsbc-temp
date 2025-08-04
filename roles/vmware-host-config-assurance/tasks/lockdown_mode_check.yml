@@ -1,0 +1,38 @@
+---
+- name: Get lockdown mode for ESXi host
+  community.vmware.vmware_host_lockdown:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: "{{ inventory_hostname }}"
+    validate_certs: false
+  register: lockdown_info
+  delegate_to: localhost
+  tags: lockdown_mode_check
+
+- name: Build JSON output with compliance check
+  set_fact:
+    lockdown_json_output: >-
+      {{
+        {
+          "hostname": inventory_hostname,
+          "lockdown_mode": lockdown_info.host_lockdown_state[inventory_hostname].current_state | default('unknown'),
+          "compliant": lockdown_info.host_lockdown_state[inventory_hostname].current_state not in ['normal', 'strict'],
+          "timestamp": lookup('pipe', 'date +%Y-%m-%dT%H:%M:%S%z')
+        }
+      }}
+  tags: lockdown_mode_check
+
+- name: Display JSON output (optional debug)
+  debug:
+    var: lockdown_json_output
+  tags: lockdown_mode_check
+
+- name: Report Lockdown Mode Assurance Result
+  debug:
+    msg: >-
+      Lockdown Mode Assurance Result for {{ inventory_hostname }}:
+      Status: {{ 'PASS' if lockdown_json_output.compliant else 'FAIL' }}
+      Current Mode: {{ lockdown_json_output.lockdown_mode }}
+      Action needed: {{ 'None' if lockdown_json_output.compliant else 'Host is in non-compliant lockdown mode. Review access control settings.' }}
+  tags: lockdown_mode_check
