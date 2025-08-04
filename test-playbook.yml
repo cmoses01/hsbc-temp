@@ -1,10 +1,10 @@
 ---
-- name: VMware Host Configuration Assurance
+- name: VMware Host Configuration Assurance - Discover Hosts
   hosts: localhost
   gather_facts: false
   environment:
     VCENTER_USERNAME: "administrator@vsphere.local"
-    VCENTER_PASSWORD: "Go2atc4labs!"
+    VCENTER_PASSWORD: ""
   roles:
     - vmware-host-config-assurance
 
@@ -13,6 +13,6 @@
   gather_facts: false
   environment:
     VCENTER_USERNAME: "administrator@vsphere.local"
-    VCENTER_PASSWORD: "Go2atc4labs!"
+    VCENTER_PASSWORD: ""
   roles:
     - vmware-host-config-assurance
