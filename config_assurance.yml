@@ -1,6 +1,7 @@
 ---
 - name: VMware Host Configuration Assurance - Discover Hosts
   hosts: localhost
+
   gather_facts: false
   environment:
     VCENTER_USERNAME: "administrator@vsphere.local"
@@ -16,3 +17,29 @@
     VCENTER_PASSWORD: ""
   roles:
     - vmware-host-config-assurance
+
+- name: Generate JSON Assurance Report
+  hosts: localhost
+  gather_facts: true
+  tasks:
+    - name: Collect all assurance results from hosts
+      set_fact:
+        final_assurance_report:
+          execution_timestamp: "{{ ansible_date_time.iso8601 }}"
+          total_hosts: "{{ groups['discovered_esxi_hosts'] | length }}"
+          total_checks: "{{ host_results | map(attribute='total_checks') | map('int') | sum }}"
+          passed_checks: "{{ host_results | map(attribute='passed_checks') | map('int') | sum }}"
+          failed_checks: "{{ host_results | map(attribute='failed_checks') | map('int') | sum }}"
+          overall_compliance: "{{ host_results | selectattr('overall_compliant', 'equalto', false) | list | length == 0 }}"
+          hosts: "{{ host_results }}"
+      vars:
+        host_results: "{{ hostvars | dict2items | selectattr('key', 'in', groups['discovered_esxi_hosts']) | map(attribute='value.host_assurance_result') | list }}"
+
+    - name: Display JSON Assurance Report
+      debug:
+        var: final_assurance_report
+
+    - name: Save assurance results to JSON file
+      copy:
+        content: "{{ final_assurance_report | to_nice_json }}"
+        dest: "./config_assurance_results.json"

@@ -2,9 +2,28 @@
 # tasks file for vmware-host-config-assurance
 
 - name: Discover ESXi hosts from vCenter
-  include_tasks: discover_hosts.yml
+  include_tasks: utils/discover_hosts.yml
   when: inventory_hostname == 'localhost'
 
+- name: Collect all host configuration facts
+  include_tasks: utils/collect_host_facts.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+
 - name: Include NTP configuration check
-  include_tasks: ntp_check.yml
+  include_tasks: checks/ntp_check_new.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+
+- name: Test2
+  include_tasks: checks/new_task.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+
+- name: Finalize host results for JSON output
+  set_fact:
+    host_assurance_result:
+      hostname: "{{ inventory_hostname }}"
+      checks: "{{ host_checks | default({}) }}"
+      total_checks: "{{ host_checks.keys() | list | length }}"
+      passed_checks: "{{ host_checks.values() | selectattr('compliant', 'equalto', true) | list | length }}"
+      failed_checks: "{{ host_checks.values() | selectattr('compliant', 'equalto', false) | list | length }}"
+      overall_compliant: "{{ (host_checks.values() | selectattr('compliant', 'equalto', false) | list | length) == 0 }}"
   when: inventory_hostname in groups.get('discovered_esxi_hosts', [])

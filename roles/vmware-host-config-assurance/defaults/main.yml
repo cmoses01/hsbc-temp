@@ -5,11 +5,16 @@
 check_mode: true
 
 # vCenter connection details
-vcenter_hostname: vcenter.lab.local
+vcenter_hostname: 10.236.72.122
 vcenter_username: "{{ lookup('env', 'VCENTER_USERNAME') }}"
 vcenter_password: "{{ lookup('env', 'VCENTER_PASSWORD') }}"
 datacenter_name: "ha-datacenter"
 
 # NTP configuration
 ntp_servers:
-  - 123.123.123.123
+  - 0.pool.ntp.org
+
+# London timezone configuration (GMT/BST)
+london_timezone: "Europe/London"
+expected_gmt_offset: 0    # GMT: UTC+0 (Winter)
+expected_bst_offset: 3600 # BST: UTC+1 (Summer) - 3600 seconds
