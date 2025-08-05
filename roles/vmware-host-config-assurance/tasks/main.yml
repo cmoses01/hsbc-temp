@@ -1,4 +1,3 @@
----
 # tasks file for vmware-host-config-assurance
 
 - name: Discover ESXi hosts from vCenter
