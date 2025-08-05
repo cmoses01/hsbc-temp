@@ -1,0 +1,18 @@
+- name: Fake task simulation
+  shell: sleep 5 && echo "Task completed for {{ inventory_hostname }}"
+  register: fake_task_async
+  delegate_to: localhost
+  async: 300
+  poll: 0
+
+- name: Wait for fake task completion
+  async_status:
+    jid: "{{ fake_task_async.ansible_job_id }}"
+  register: fake_task_result
+  until: fake_task_result.finished
+  retries: 30
+  delay: 2
+  delegate_to: localhost
+
+- debug:
+    var: fake_task_result

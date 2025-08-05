@@ -1,0 +1,53 @@
+---
+- name: Extract NTP configuration from collected facts
+  set_fact:
+    current_ntp_servers: "{{ collected_host_facts.config.dateTimeInfo.ntpConfig.server | default([]) }}"
+    current_ntp_enabled: "{{ collected_host_facts.config.dateTimeInfo.enabled | default(false) }}"
+    current_time_protocol: "{{ collected_host_facts.config.dateTimeInfo.systemClockProtocol | default('') }}"
+
+- name: Check NTP server configuration compliance
+  set_fact:
+    ntp_config_compliant: "{{ current_ntp_servers | sort == ntp_servers | sort }}"
+    ntp_sync_compliant: "{{ current_ntp_enabled and current_time_protocol == 'ntp' and current_ntp_servers | length > 0 }}"
+
+- name: Report NTP configuration result
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "NTP Configuration"
+    task_result:
+      changed: false
+      failed: "{{ not ntp_config_compliant }}"
+      msg: "Current NTP servers: {{ current_ntp_servers | join(', ') if current_ntp_servers else 'None configured' }}"
+    expected_config: "{{ ntp_servers | join(', ') }}"
+
+- name: Report NTP sync status result
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "NTP Sync Status"
+    task_result:
+      changed: false
+      failed: "{{ not ntp_sync_compliant }}"
+      msg: "NTP sync status: {{ 'synchronized' if ntp_sync_compliant else 'not synchronized' }} (enabled: {{ current_ntp_enabled }}, protocol: {{ current_time_protocol }})"
+    expected_config: "synchronized with configured NTP servers"
+
+- name: Get timezone information from ESXi host facts
+  set_fact:
+    host_timezone_info: "{{ collected_host_facts.config.dateTimeInfo.timeZone | default({}) }}"
+    host_gmt_offset: "{{ collected_host_facts.config.dateTimeInfo.timeZone.gmtOffset }}"
+  when: current_ntp_enabled
+
+- name: Check GMT offset compliance
+  set_fact:
+    timezone_compliant: "{{ (host_gmt_offset|int) == (expected_gmt_offset|int) }}"
+  when: current_ntp_enabled and host_gmt_offset is defined
+
+- name: Report timezone offset result
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "GMT Offset Check"
+    task_result:
+      changed: false
+      failed: "{{ not timezone_compliant | default(true) }}"
+      msg: "Current GMT offset: {{ host_gmt_offset | default('N/A') }} seconds"
+    expected_config: "GMT offset: {{ expected_gmt_offset }} seconds"
+  when: current_ntp_enabled

@@ -1,0 +1,10 @@
+---
+- name: Store assurance result for JSON output
+  set_fact:
+    host_checks: "{{ host_checks | default({}) | combine({check_name: check_result}) }}"
+  vars:
+    check_result:
+      status: "{{ 'FAIL' if task_result.failed else 'PASS' }}"
+      compliant: "{{ not task_result.failed }}"
+      expected_config: "{{ expected_config }}"
+      actual_config: "{{ task_result.msg | default('N/A') }}"
