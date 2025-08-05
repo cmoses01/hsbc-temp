@@ -14,5 +14,5 @@ datacenter_name: "ha-datacenter"
 ntp_servers:
   - 0.pool.ntp.org
 
-# Expected GMT offset in seconds
-expected_gmt_offset: 0  # UTC+0 (set to desired timezone offset)
+# Time offset threshold in seconds
+time_offset_threshold: 5  # Maximum acceptable time drift in seconds
