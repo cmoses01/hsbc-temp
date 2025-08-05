@@ -29,3 +29,26 @@
       failed: "{{ not ntp_sync_compliant }}"
       msg: "NTP sync status: {{ 'synchronized' if ntp_sync_compliant else 'not synchronized' }} (enabled: {{ current_ntp_enabled }}, protocol: {{ current_time_protocol }})"
     expected_config: "synchronized with configured NTP servers"
+
+- name: Get timezone information from ESXi host facts
+  set_fact:
+    host_timezone_info: "{{ collected_host_facts.config.dateTimeInfo.timeZone | default({}) }}"
+    host_gmt_offset: "{{ collected_host_facts.config.dateTimeInfo.timeZone.gmtOffset | default(0) }}"
+  when: current_ntp_enabled
+
+- name: Check London timezone offset compliance
+  set_fact:
+    timezone_compliant: "{{ (host_gmt_offset|int) == (expected_gmt_offset|int) or (host_gmt_offset|int) == (expected_bst_offset|int) }}"
+    current_timezone_desc: "{{ 'BST (UTC+1)' if (host_gmt_offset|int) == (expected_bst_offset|int) else ('GMT (UTC+0)' if (host_gmt_offset|int) == (expected_gmt_offset|int) else 'Unknown offset: ' + (host_gmt_offset|string)) }}"
+  when: current_ntp_enabled and host_gmt_offset is defined
+
+- name: Report timezone offset result
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "Timezone Offset (London)"
+    task_result:
+      changed: false
+      failed: "{{ not timezone_compliant | default(true) }}"
+      msg: "Current timezone: {{ current_timezone_desc | default('N/A') }} (GMT offset: {{ host_gmt_offset | default('N/A') }} seconds)"
+    expected_config: "London timezone: GMT (UTC+0) or BST (UTC+1)"
+  when: current_ntp_enabled
