@@ -1,0 +1,104 @@
+---
+- name: Extract AD domain (if any) from config.option keys
+  set_fact:
+    ad_domain: >-
+      {{
+        (
+          (collected_host_facts.config.option
+           | selectattr('key', 'search', 'domain|Domain|DomainName')
+           | list | first | default({})
+          ).value
+        ) | default('')
+      }}
+  tags: ad_join_validation
+
+- name: Set AD joined flag, authentication mode, and AD/LDAP service running status
+  set_fact:
+    ad_joined: "{{ ad_domain | length > 0 }}"
+    auth_mode: "{{ (collected_host_facts.config.authenticationManagerInfo.authType | default('local')) | lower }}"
+    ad_auth_service_running: >-
+      {{
+        (collected_host_facts.config.service.service
+         | selectattr('running', 'equalto', true)
+         | selectattr('key', 'search', 'ldap|ad|directory|activedirectory|auth')
+         | list | length) > 0
+        if (collected_host_facts.config.service is defined and
+            collected_host_facts.config.service.service is defined)
+        else false
+      }}
+  tags: ad_join_validation
+
+- name: Set compliance variables except for compliance_result
+  set_fact:
+    ad_join_compliant: "{{ (not ad_joined) and (auth_mode == 'local') and (not ad_auth_service_running) }}"
+    current_ad_status: >-
+      {%- if ad_joined -%}
+        joined
+      {%- elif ad_auth_service_running -%}
+        ad_service_active
+      {%- else -%}
+        not_joined
+      {%- endif -%}
+  tags: ad_join_validation
+
+- name: Set compliance_result using ad_join_compliant
+  set_fact:
+    compliance_result: "{{ 'pass' if ad_join_compliant else 'fail' }}"
+  tags: ad_join_validation
+
+- name: Report Domain Join Status
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "Domain Join Status"
+    task_result:
+      changed: false
+      failed: "{{ ad_joined }}"
+      msg: "AD joined: {{ 'yes' if ad_joined else 'no' }}, Domain: {{ ad_domain | default('none') }}"
+    expected_config: "Host should not be joined to any domain"
+  tags: ad_join_validation
+
+- name: Report Authentication Mode
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "Authentication Mode"
+    task_result:
+      changed: false
+      failed: "{{ auth_mode != 'local' }}"
+      msg: "Authentication mode: {{ auth_mode }}"
+    expected_config: "Local authentication mode"
+  tags: ad_join_validation
+
+- name: Report AD Authentication Service Status
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "AD/LDAP/Directory Service Status"
+    task_result:
+      changed: false
+      failed: "{{ ad_auth_service_running }}"
+      msg: "Any AD/LDAP/Directory authentication services running: {{ ad_auth_service_running }}"
+    expected_config: "No AD/LDAP/Directory authentication services running"
+  tags: ad_join_validation
+
+
+- name: Build evidence for ad_join_validation
+  set_fact:
+    ad_join_validation:
+      hostname: "{{ inventory_hostname }}"
+      ad_status: "{{ current_ad_status }}"
+      auth_mode: "{{ auth_mode }}"
+      ad_domain: "{{ ad_domain }}"
+      ad_auth_service_running: "{{ ad_auth_service_running }}"
+      compliant: "{{ ad_join_compliant }}"
+      compliance_result: "{{ compliance_result }}"
+      timestamp: "{{ lookup('pipe', 'date +%Y-%m-%dT%H:%M:%S%z') }}"
+  tags: ad_join_validation
+
+- name: Store ad_join_validation evidence in host_checks
+  set_fact:
+    host_checks: "{{ host_checks | default({}) | combine({'ad_join_validation': ad_join_validation}) }}"
+  tags: ad_join_validation
+
+- name: Display ad join validation result
+  debug:
+    var: ad_join_validation
+  tags: ad_join_validation
