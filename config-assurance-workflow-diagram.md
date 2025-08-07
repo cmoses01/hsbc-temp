@@ -31,15 +31,15 @@ flowchart TD
     T --> U[✅ End: View Results]
     
     %% Styling
-    classDef phaseBox fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef checkBox fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    classDef reportBox fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
-    classDef dashBox fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef phaseBox fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef checkBox fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
+    classDef reportBox fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px;
+    classDef dashBox fill:#fff3e0,stroke:#e65100,stroke-width:2px;
     
-    class B,C,D,E phaseBox
-    class H,I,J,K checkBox  
-    class N,O,P,Q reportBox
-    class R,S,T dashBox
+    class B,C,D,E phaseBox;
+    class H,I,J,K checkBox;
+    class N,O,P,Q reportBox;
+    class R,S,T dashBox;
 ```
 
 ## Workflow Overview

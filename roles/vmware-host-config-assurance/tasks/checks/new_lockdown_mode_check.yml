@@ -39,7 +39,7 @@
     task_result:
       changed: false
       failed: "{{ not lockdown_compliant }}"
-      msg: "Lockdown mode: {{ lockdown_mode_readable }} (source: {{ lockdown_source | default('unknown') }})"
+      msg: "{{ lockdown_mode_readable }}"
     expected_config: "disabled"
   tags: lockdown_mode_check
 

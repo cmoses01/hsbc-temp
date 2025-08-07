@@ -17,7 +17,7 @@
     task_result:
       changed: false
       failed: "{{ not ntp_config_compliant }}"
-      msg: "Current NTP servers: {{ current_ntp_servers | join(', ') if current_ntp_servers else 'None configured' }}"
+      msg: "{{ current_ntp_servers | join(', ') if current_ntp_servers else 'None configured' }}"
     expected_config: "{{ ntp_servers | join(', ') }}"
 
 - name: Report NTP sync status result
@@ -27,8 +27,8 @@
     task_result:
       changed: false
       failed: "{{ not ntp_sync_compliant }}"
-      msg: "NTP sync status: {{ 'synchronized' if ntp_sync_compliant else 'not synchronized' }} (enabled: {{ current_ntp_enabled }}, protocol: {{ current_time_protocol }})"
-    expected_config: "synchronized with configured NTP servers"
+      msg: "{{ 'synchronized' if ntp_sync_compliant else 'not synchronized' }} (enabled: {{ current_ntp_enabled }}, protocol: {{ current_time_protocol }})"
+    expected_config: "synchronized"
 
 - name: Get NTP time drift information from ESXi host facts
   set_fact:
@@ -47,6 +47,6 @@
     task_result:
       changed: false
       failed: "{{ not time_offset_compliant | default(true) }}"
-      msg: "Current time drift: {{ ntp_drift | default('N/A') }} seconds"
+      msg: "{{ ntp_drift | default('N/A') }} seconds"
     expected_config: "Time offset within ±{{ time_offset_threshold }} seconds"
   when: current_ntp_enabled

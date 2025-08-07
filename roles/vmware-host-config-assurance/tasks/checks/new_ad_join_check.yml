@@ -53,8 +53,8 @@
     task_result:
       changed: false
       failed: "{{ ad_joined }}"
-      msg: "AD joined: {{ 'yes' if ad_joined else 'no' }}, Domain: {{ ad_domain | default('none') }}"
-    expected_config: "Host should not be joined to any domain"
+      msg: "AD Domain: {{ 'None' if not ad_domain | default('none') else ad_domain }}"
+    expected_config: "AD Domain: None"
   tags: ad_join_validation
 
 - name: Report Authentication Mode
@@ -64,8 +64,8 @@
     task_result:
       changed: false
       failed: "{{ auth_mode != 'local' }}"
-      msg: "Authentication mode: {{ auth_mode }}"
-    expected_config: "Local authentication mode"
+      msg: "{{ auth_mode }}"
+    expected_config: "local"
   tags: ad_join_validation
 
 - name: Report AD Authentication Service Status
@@ -75,30 +75,30 @@
     task_result:
       changed: false
       failed: "{{ ad_auth_service_running }}"
-      msg: "Any AD/LDAP/Directory authentication services running: {{ ad_auth_service_running }}"
-    expected_config: "No AD/LDAP/Directory authentication services running"
+      msg: "{{ ad_auth_service_running }}"
+    expected_config: "False"
   tags: ad_join_validation
 
 
-- name: Build evidence for ad_join_validation
-  set_fact:
-    ad_join_validation:
-      hostname: "{{ inventory_hostname }}"
-      ad_status: "{{ current_ad_status }}"
-      auth_mode: "{{ auth_mode }}"
-      ad_domain: "{{ ad_domain }}"
-      ad_auth_service_running: "{{ ad_auth_service_running }}"
-      compliant: "{{ ad_join_compliant }}"
-      compliance_result: "{{ compliance_result }}"
-      timestamp: "{{ lookup('pipe', 'date +%Y-%m-%dT%H:%M:%S%z') }}"
-  tags: ad_join_validation
+# - name: Build evidence for ad_join_validation
+#   set_fact:
+#     ad_join_validation:
+#       hostname: "{{ inventory_hostname }}"
+#       ad_status: "{{ current_ad_status }}"
+#       auth_mode: "{{ auth_mode }}"
+#       ad_domain: "{{ ad_domain }}"
+#       ad_auth_service_running: "{{ ad_auth_service_running }}"
+#       compliant: "{{ ad_join_compliant }}"
+#       compliance_result: "{{ compliance_result }}"
+#       timestamp: "{{ lookup('pipe', 'date +%Y-%m-%dT%H:%M:%S%z') }}"
+#   tags: ad_join_validation
 
-- name: Store ad_join_validation evidence in host_checks
-  set_fact:
-    host_checks: "{{ host_checks | default({}) | combine({'ad_join_validation': ad_join_validation}) }}"
-  tags: ad_join_validation
+# - name: Store ad_join_validation evidence in host_checks
+#   set_fact:
+#     host_checks: "{{ host_checks | default({}) | combine({'ad_join_validation': ad_join_validation}) }}"
+#   tags: ad_join_validation
 
-- name: Display ad join validation result
-  debug:
-    var: ad_join_validation
-  tags: ad_join_validation
+# - name: Display ad join validation result
+#   debug:
+#     var: ad_join_validation
+#   tags: ad_join_validation
