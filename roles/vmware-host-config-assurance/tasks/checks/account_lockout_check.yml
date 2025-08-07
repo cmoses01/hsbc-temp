@@ -1,0 +1,50 @@
+---
+- name: Check if account lockout info is available in collected facts
+  set_fact:
+    account_lockout_in_facts: "{{ collected_host_facts is defined and collected_host_facts.config is defined and collected_host_facts.config.option is defined }}"
+  tags: account_lockout_check
+
+- name: Fail if account lockout info not found in collected facts
+  fail:
+    msg: "Account lockout info 'Security.AccountLockFailures' not found in collected_host_facts.config.option.Ensure its collected by vmware_host_facts."
+  when: not account_lockout_in_facts
+  tags: account_lockout_check
+
+- name: Extract account lockout failure threshold
+  set_fact:
+    account_lockout_value: >-
+      {{
+        (collected_host_facts.config.option 
+          | selectattr('key', 'equalto', 'Security.AccountLockFailures') 
+          | map(attribute='value') 
+          | list 
+          | first ) | default('not found')
+      }}
+  when: account_lockout_in_facts
+  tags: account_lockout_check
+
+- name: Assert account lockout failure threshold is 5 or fewer
+  assert:
+    that:
+      - account_lockout_value != 'not found'
+      - account_lockout_value | int <= 5
+    fail_msg: "Account lockout failure threshold is set above 5, current value is {{ account_lockout_value }}."
+    success_msg: "Account lockout failure threshold is correctly set to 5 or less."
+  when: account_lockout_in_facts
+  tags: account_lockout_check
+
+- name: Report Account Lockout Compliance
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "Account Lockout Failure Threshold"
+    task_result:
+      changed: false
+      failed: "{{ account_lockout_value | int > 5 }}"
+      msg: "Account lockout failure threshold: {{ account_lockout_value }}"
+    expected_config: "5 or fewer"
+  tags: account_lockout_check
+
+- name: Display account lockout failure threshold per host
+  debug:
+    msg: "{{ inventory_hostname }}: Account lockout failure threshold is set to {{ account_lockout_value }}"
+  tags: account_lockout_check

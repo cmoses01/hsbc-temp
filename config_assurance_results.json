@@ -1,0 +1,211 @@
+{
+    "execution_timestamp": "2025-08-07T09:23:17Z",
+    "failed_checks": "2",
+    "hosts": [
+        {
+            "checks": {
+                "AD/LDAP/Directory Service Status": {
+                    "actual_config": "Any AD/LDAP/Directory authentication services running: False",
+                    "compliant": true,
+                    "expected_config": "No AD/LDAP/Directory authentication services running",
+                    "status": "PASS"
+                },
+                "Account Lockout Failure Threshold": {
+                    "actual_config": "Account lockout failure threshold: 5",
+                    "compliant": true,
+                    "expected_config": "5 or fewer",
+                    "status": "PASS"
+                },
+                "Authentication Mode": {
+                    "actual_config": "Authentication mode: local",
+                    "compliant": true,
+                    "expected_config": "Local authentication mode",
+                    "status": "PASS"
+                },
+                "Domain Join Status": {
+                    "actual_config": "AD joined: no, Domain: ",
+                    "compliant": true,
+                    "expected_config": "Host should not be joined to any domain",
+                    "status": "PASS"
+                },
+                "Lockdown Mode Compliance": {
+                    "actual_config": "Lockdown mode: disabled (source: collected_facts)",
+                    "compliant": true,
+                    "expected_config": "disabled",
+                    "status": "PASS"
+                },
+                "NTP Configuration": {
+                    "actual_config": "Current NTP servers: 0.pool.ntp.org",
+                    "compliant": true,
+                    "expected_config": "0.pool.ntp.org",
+                    "status": "PASS"
+                },
+                "NTP Sync Status": {
+                    "actual_config": "NTP sync status: synchronized (enabled: True, protocol: ntp)",
+                    "compliant": true,
+                    "expected_config": "synchronized with configured NTP servers",
+                    "status": "PASS"
+                },
+                "Time Offset Threshold": {
+                    "actual_config": "Current time drift: 0.0 seconds",
+                    "compliant": true,
+                    "expected_config": "Time offset within \u00b15 seconds",
+                    "status": "PASS"
+                },
+                "ad_join_validation": {
+                    "ad_auth_service_running": false,
+                    "ad_domain": "",
+                    "ad_status": "not_joined",
+                    "auth_mode": "local",
+                    "compliance_result": "pass",
+                    "compliant": true,
+                    "hostname": "esxi01.kubelab.demo",
+                    "timestamp": "2025-08-07T14:53:13+0530"
+                }
+            },
+            "failed_checks": "0",
+            "hostname": "esxi01.kubelab.demo",
+            "overall_compliant": true,
+            "passed_checks": "9",
+            "total_checks": "9"
+        },
+        {
+            "checks": {
+                "AD/LDAP/Directory Service Status": {
+                    "actual_config": "Any AD/LDAP/Directory authentication services running: False",
+                    "compliant": true,
+                    "expected_config": "No AD/LDAP/Directory authentication services running",
+                    "status": "PASS"
+                },
+                "Account Lockout Failure Threshold": {
+                    "actual_config": "Account lockout failure threshold: 5",
+                    "compliant": true,
+                    "expected_config": "5 or fewer",
+                    "status": "PASS"
+                },
+                "Authentication Mode": {
+                    "actual_config": "Authentication mode: local",
+                    "compliant": true,
+                    "expected_config": "Local authentication mode",
+                    "status": "PASS"
+                },
+                "Domain Join Status": {
+                    "actual_config": "AD joined: no, Domain: ",
+                    "compliant": true,
+                    "expected_config": "Host should not be joined to any domain",
+                    "status": "PASS"
+                },
+                "Lockdown Mode Compliance": {
+                    "actual_config": "Lockdown mode: normal (source: collected_facts)",
+                    "compliant": false,
+                    "expected_config": "disabled",
+                    "status": "FAIL"
+                },
+                "NTP Configuration": {
+                    "actual_config": "Current NTP servers: 0.pool.ntp.org",
+                    "compliant": true,
+                    "expected_config": "0.pool.ntp.org",
+                    "status": "PASS"
+                },
+                "NTP Sync Status": {
+                    "actual_config": "NTP sync status: synchronized (enabled: True, protocol: ntp)",
+                    "compliant": true,
+                    "expected_config": "synchronized with configured NTP servers",
+                    "status": "PASS"
+                },
+                "Time Offset Threshold": {
+                    "actual_config": "Current time drift: 0.0 seconds",
+                    "compliant": true,
+                    "expected_config": "Time offset within \u00b15 seconds",
+                    "status": "PASS"
+                },
+                "ad_join_validation": {
+                    "ad_auth_service_running": false,
+                    "ad_domain": "",
+                    "ad_status": "not_joined",
+                    "auth_mode": "local",
+                    "compliance_result": "pass",
+                    "compliant": true,
+                    "hostname": "esxi02.kubelab.demo",
+                    "timestamp": "2025-08-07T14:53:13+0530"
+                }
+            },
+            "failed_checks": "1",
+            "hostname": "esxi02.kubelab.demo",
+            "overall_compliant": false,
+            "passed_checks": "8",
+            "total_checks": "9"
+        },
+        {
+            "checks": {
+                "AD/LDAP/Directory Service Status": {
+                    "actual_config": "Any AD/LDAP/Directory authentication services running: False",
+                    "compliant": true,
+                    "expected_config": "No AD/LDAP/Directory authentication services running",
+                    "status": "PASS"
+                },
+                "Account Lockout Failure Threshold": {
+                    "actual_config": "Account lockout failure threshold: 5",
+                    "compliant": true,
+                    "expected_config": "5 or fewer",
+                    "status": "PASS"
+                },
+                "Authentication Mode": {
+                    "actual_config": "Authentication mode: local",
+                    "compliant": true,
+                    "expected_config": "Local authentication mode",
+                    "status": "PASS"
+                },
+                "Domain Join Status": {
+                    "actual_config": "AD joined: no, Domain: ",
+                    "compliant": true,
+                    "expected_config": "Host should not be joined to any domain",
+                    "status": "PASS"
+                },
+                "Lockdown Mode Compliance": {
+                    "actual_config": "Lockdown mode: normal (source: collected_facts)",
+                    "compliant": false,
+                    "expected_config": "disabled",
+                    "status": "FAIL"
+                },
+                "NTP Configuration": {
+                    "actual_config": "Current NTP servers: 0.pool.ntp.org",
+                    "compliant": true,
+                    "expected_config": "0.pool.ntp.org",
+                    "status": "PASS"
+                },
+                "NTP Sync Status": {
+                    "actual_config": "NTP sync status: synchronized (enabled: True, protocol: ntp)",
+                    "compliant": true,
+                    "expected_config": "synchronized with configured NTP servers",
+                    "status": "PASS"
+                },
+                "Time Offset Threshold": {
+                    "actual_config": "Current time drift: 0.0 seconds",
+                    "compliant": true,
+                    "expected_config": "Time offset within \u00b15 seconds",
+                    "status": "PASS"
+                },
+                "ad_join_validation": {
+                    "ad_auth_service_running": false,
+                    "ad_domain": "",
+                    "ad_status": "not_joined",
+                    "auth_mode": "local",
+                    "compliance_result": "pass",
+                    "compliant": true,
+                    "hostname": "esxi03.kubelab.demo",
+                    "timestamp": "2025-08-07T14:53:13+0530"
+                }
+            },
+            "failed_checks": "1",
+            "hostname": "esxi03.kubelab.demo",
+            "overall_compliant": false,
+            "passed_checks": "8",
+            "total_checks": "9"
+        }
+    ],
+    "overall_compliance": false,
+    "passed_checks": "25",
+    "total_checks": "27",
+    "total_hosts": "3"
+}
