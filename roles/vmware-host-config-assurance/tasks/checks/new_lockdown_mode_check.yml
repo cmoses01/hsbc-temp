@@ -1,0 +1,49 @@
+- name: Check if lockdown info is available in collected facts
+  set_fact:
+    lockdown_in_facts: "{{ collected_host_facts is defined and collected_host_facts.config is defined and collected_host_facts.config.lockdownMode is defined }}"
+  tags: lockdown_mode_check
+
+- name: Fail if lockdown info not found in collected facts
+  fail:
+    msg: "Lockdown mode info not found in collected_host_facts. Please ensure that 'config.lockdownMode' is collected by vmware_host_facts module."
+  when: not lockdown_in_facts
+  tags: lockdown_mode_check
+
+- name: Get lockdown mode from collected facts
+  set_fact:
+    current_lockdown_mode: "{{ collected_host_facts.config.lockdownMode }}"
+    lockdown_source: "collected_facts"
+  when: lockdown_in_facts
+  tags: lockdown_mode_check
+
+- name: Set human-readable lockdown mode and compliance
+  set_fact:
+    lockdown_mode_readable: >-
+      {{
+        {
+          'lockdownDisabled': 'disabled',
+          'disabled': 'disabled',
+          'lockdownNormal': 'normal',
+          'normal': 'normal',
+          'lockdownStrict': 'strict',
+          'strict': 'strict'
+        }.get(current_lockdown_mode | default('unknown'), current_lockdown_mode | default('unknown'))
+      }}
+    lockdown_compliant: "{{ current_lockdown_mode | default('unknown') in ['lockdownDisabled', 'disabled'] }}"
+  tags: lockdown_mode_check
+
+- name: Report Lockdown Mode Compliance
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "Lockdown Mode Compliance"
+    task_result:
+      changed: false
+      failed: "{{ not lockdown_compliant }}"
+      msg: "{{ lockdown_mode_readable }}"
+    expected_config: "disabled"
+  tags: lockdown_mode_check
+
+- name: "Display lockdown mode per host in servername: lockdown_mode format"
+  debug:
+    msg: "{{ inventory_hostname }}: {{ lockdown_mode_readable }}"
+  tags: lockdown_mode_check

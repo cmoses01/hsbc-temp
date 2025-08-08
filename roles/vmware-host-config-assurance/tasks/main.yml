@@ -9,12 +9,18 @@
   when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
 
 
-
 - name: Include NTP configuration check
   include_tasks: checks/ntp_check_new.yml
   when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
 
 
+- name: Include new Lockdown mode check
+  include_tasks: checks/new_lockdown_mode_check.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+
+- name: Include new AD join check
+  include_tasks: checks/new_ad_join_check.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
 
 - name: Finalize host results for JSON output
   set_fact:
@@ -26,3 +32,4 @@
       failed_checks: "{{ host_checks.values() | selectattr('compliant', 'equalto', false) | list | length }}"
       overall_compliant: "{{ (host_checks.values() | selectattr('compliant', 'equalto', false) | list | length) == 0 }}"
   when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+
