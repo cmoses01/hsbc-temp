@@ -1,0 +1,48 @@
+---
+- name: Check if uptime info is available in collected facts
+  set_fact:
+    uptime_in_facts: >-
+      {{
+        collected_host_facts is defined and
+        collected_host_facts.summary is defined and
+        collected_host_facts.summary.quickStats is defined and
+        collected_host_facts.summary.quickStats.uptime is defined
+      }}
+  tags: host_uptime_check
+
+- name: Fail if uptime info not found in collected facts
+  fail:
+    msg: "Host uptime info not found in collected_host_facts. Please ensure 'summary.quickStats.uptime' is collected by vmware_host_facts module."
+  when: not uptime_in_facts
+  tags: host_uptime_check
+
+- name: Calculate host uptime in days
+  set_fact:
+    host_uptime_days: "{{ (collected_host_facts.summary.quickStats.uptime | float) / 86400 }}"
+  when: uptime_in_facts
+  tags: host_uptime_check
+
+- name: Set compliance status based on uptime threshold
+  set_fact:
+    uptime_compliant: "{{ (host_uptime_days | float) <= (patch_cycle_threshold_days | float) }}"
+  when: uptime_in_facts
+  tags: host_uptime_check
+
+- name: Report Host Uptime Compliance
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "Host Uptime Compliance"
+    task_result:
+      changed: false
+      failed: "{{ not uptime_compliant }}"
+      msg: >-
+        Host uptime is {{ (host_uptime_days | float) | round(2) }} days (threshold: {{ patch_cycle_threshold_days }} days)
+    expected_config: "Uptime ≤ {{ patch_cycle_threshold_days }} days"
+  when: uptime_in_facts
+  tags: host_uptime_check
+
+- name: Display host uptime in days for each host
+  debug:
+    msg: "{{ inventory_hostname }}: {{ (host_uptime_days | float) | round(2) }} days"
+  when: uptime_in_facts
+  tags: host_uptime_check
