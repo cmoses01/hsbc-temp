@@ -1,0 +1,64 @@
+---
+- name: Check if OS and firmware info are available in collected facts
+  set_fact:
+    os_firmware_info_in_facts: >-
+      {{
+        collected_host_facts is defined and
+        collected_host_facts.summary is defined and
+        collected_host_facts.summary.config is defined and
+        collected_host_facts.summary.config.product is defined and
+        collected_host_facts.summary.config.product.version is defined and
+        collected_host_facts.hardware is defined and
+        collected_host_facts.hardware.biosInfo is defined and
+        collected_host_facts.hardware.biosInfo.biosVersion is defined
+      }}
+  tags: host_firmware_check
+
+- name: Fail if OS or firmware info not in collected facts
+  fail:
+    msg: "OS version or firmware version missing in collected_host_facts. Ensure 'summary.config.product.version' and 'hardware.biosInfo.biosVersion' are collected."
+  when: not os_firmware_info_in_facts
+  tags: host_firmware_check
+
+- name: Get current OS and firmware versions
+  set_fact:
+    current_esxi_os_version: "{{ collected_host_facts.summary.config.product.version }}"
+    current_firmware_version: "{{ collected_host_facts.hardware.biosInfo.biosVersion }}"
+  when: os_firmware_info_in_facts
+  tags: host_firmware_check
+
+- name: Lookup approved firmware for the current OS version
+  set_fact:
+    approved_fw_for_os: "{{ esxi_firmware_approval_map.get(current_esxi_os_version.split('.')[0] ~ '.' ~ current_esxi_os_version.split('.')[1], []) }}"
+  when: os_firmware_info_in_facts
+  tags: host_firmware_check
+
+- name: Set compliance based on firmware mapping logic
+  set_fact:
+    firmware_compliant: >-
+      {{
+        (approved_fw_for_os is string and current_firmware_version == approved_fw_for_os)
+        or
+        (approved_fw_for_os is sequence and current_firmware_version in approved_fw_for_os)
+      }}
+  when: os_firmware_info_in_facts
+  tags: host_firmware_check
+
+- name: Report Host Firmware Mapping Compliance
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "Host OS/Firmware Mapping Compliance"
+    task_result:
+      changed: false
+      failed: "{{ not firmware_compliant }}"
+      msg: >-
+        ESXi version: {{ current_esxi_os_version }}; Firmware: {{ current_firmware_version }} (approved: {{ approved_fw_for_os }})
+    expected_config: "Firmware as mapped for ESXi version"
+  when: os_firmware_info_in_facts
+  tags: host_firmware_check
+
+- name: Show mapping per host
+  debug:
+    msg: "{{ inventory_hostname }}: ESXi {{ current_esxi_os_version }} → Firmware {{ current_firmware_version }} (approved: {{ approved_fw_for_os }})"
+  when: os_firmware_info_in_facts
+  tags: host_firmware_check

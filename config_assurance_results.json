@@ -1,6 +1,6 @@
 {
-    "execution_timestamp": "2025-08-07T09:23:17Z",
-    "failed_checks": "2",
+    "execution_timestamp": "2025-08-11T11:16:47Z",
+    "failed_checks": "5",
     "hosts": [
         {
             "checks": {
@@ -26,6 +26,18 @@
                     "actual_config": "AD joined: no, Domain: ",
                     "compliant": true,
                     "expected_config": "Host should not be joined to any domain",
+                    "status": "PASS"
+                },
+                "Host OS/Firmware Mapping Compliance": {
+                    "actual_config": "ESXi version: 8.0.2; Firmware: 6.00 (approved: ['6.30', '6.40'])",
+                    "compliant": false,
+                    "expected_config": "Firmware as mapped for ESXi version",
+                    "status": "FAIL"
+                },
+                "Host Uptime Compliance": {
+                    "actual_config": "Host uptime is 13.64 days (threshold: 90 days)",
+                    "compliant": true,
+                    "expected_config": "Uptime \u2264 90 days",
                     "status": "PASS"
                 },
                 "Lockdown Mode Compliance": {
@@ -60,14 +72,14 @@
                     "compliance_result": "pass",
                     "compliant": true,
                     "hostname": "esxi01.kubelab.demo",
-                    "timestamp": "2025-08-07T14:53:13+0530"
+                    "timestamp": "2025-08-11T16:46:45+0530"
                 }
             },
-            "failed_checks": "0",
+            "failed_checks": "1",
             "hostname": "esxi01.kubelab.demo",
-            "overall_compliant": true,
-            "passed_checks": "9",
-            "total_checks": "9"
+            "overall_compliant": false,
+            "passed_checks": "10",
+            "total_checks": "11"
         },
         {
             "checks": {
@@ -93,6 +105,18 @@
                     "actual_config": "AD joined: no, Domain: ",
                     "compliant": true,
                     "expected_config": "Host should not be joined to any domain",
+                    "status": "PASS"
+                },
+                "Host OS/Firmware Mapping Compliance": {
+                    "actual_config": "ESXi version: 8.0.2; Firmware: 6.00 (approved: ['6.30', '6.40'])",
+                    "compliant": false,
+                    "expected_config": "Firmware as mapped for ESXi version",
+                    "status": "FAIL"
+                },
+                "Host Uptime Compliance": {
+                    "actual_config": "Host uptime is 11.51 days (threshold: 90 days)",
+                    "compliant": true,
+                    "expected_config": "Uptime \u2264 90 days",
                     "status": "PASS"
                 },
                 "Lockdown Mode Compliance": {
@@ -127,14 +151,14 @@
                     "compliance_result": "pass",
                     "compliant": true,
                     "hostname": "esxi02.kubelab.demo",
-                    "timestamp": "2025-08-07T14:53:13+0530"
+                    "timestamp": "2025-08-11T16:46:45+0530"
                 }
             },
-            "failed_checks": "1",
+            "failed_checks": "2",
             "hostname": "esxi02.kubelab.demo",
             "overall_compliant": false,
-            "passed_checks": "8",
-            "total_checks": "9"
+            "passed_checks": "9",
+            "total_checks": "11"
         },
         {
             "checks": {
@@ -160,6 +184,18 @@
                     "actual_config": "AD joined: no, Domain: ",
                     "compliant": true,
                     "expected_config": "Host should not be joined to any domain",
+                    "status": "PASS"
+                },
+                "Host OS/Firmware Mapping Compliance": {
+                    "actual_config": "ESXi version: 8.0.2; Firmware: 6.00 (approved: ['6.30', '6.40'])",
+                    "compliant": false,
+                    "expected_config": "Firmware as mapped for ESXi version",
+                    "status": "FAIL"
+                },
+                "Host Uptime Compliance": {
+                    "actual_config": "Host uptime is 11.51 days (threshold: 90 days)",
+                    "compliant": true,
+                    "expected_config": "Uptime \u2264 90 days",
                     "status": "PASS"
                 },
                 "Lockdown Mode Compliance": {
@@ -194,18 +230,18 @@
                     "compliance_result": "pass",
                     "compliant": true,
                     "hostname": "esxi03.kubelab.demo",
-                    "timestamp": "2025-08-07T14:53:13+0530"
+                    "timestamp": "2025-08-11T16:46:45+0530"
                 }
             },
-            "failed_checks": "1",
+            "failed_checks": "2",
             "hostname": "esxi03.kubelab.demo",
             "overall_compliant": false,
-            "passed_checks": "8",
-            "total_checks": "9"
+            "passed_checks": "9",
+            "total_checks": "11"
         }
     ],
     "overall_compliance": false,
-    "passed_checks": "25",
-    "total_checks": "27",
+    "passed_checks": "28",
+    "total_checks": "33",
     "total_hosts": "3"
 }

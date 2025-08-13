@@ -1,0 +1,10 @@
+tags_reference:
+  - check_name: "Account Lockout Check"
+    tag: account_lockout_check
+    description: "Validates ESXi account lockout settings (e.g., failures, unlock time)."
+  - check_name: "Host Uptime Compliance"
+    tag: host_uptime_check
+    description: "Ensures ESXi host uptime is below patch cycle threshold."
+  - check_name: "Host Firmware Compliance"
+    tag: host_firmware_check
+    description: "Ensures firmware version matches ESXi OS version mapping."

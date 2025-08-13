@@ -6,7 +6,7 @@
 
 - name: Fail if account lockout info not found in collected facts
   fail:
-    msg: "Account lockout info 'Security.AccountLockFailures' not found in collected_host_facts.config.option.Ensure its collected by vmware_host_facts."
+    msg: "Account lockout info 'Security.AccountLockFailures' not found in collected_host_facts.config.option. Ensure it is collected."
   when: not account_lockout_in_facts
   tags: account_lockout_check
 
@@ -18,18 +18,18 @@
           | selectattr('key', 'equalto', 'Security.AccountLockFailures') 
           | map(attribute='value') 
           | list 
-          | first ) | default('not found')
+          | first) | default('not found')
       }}
   when: account_lockout_in_facts
   tags: account_lockout_check
 
-- name: Assert account lockout failure threshold is 5 or fewer
+- name: Assert account lockout failure threshold compliance
   assert:
     that:
       - account_lockout_value != 'not found'
-      - account_lockout_value | int <= 5
-    fail_msg: "Account lockout failure threshold is set above 5, current value is {{ account_lockout_value }}."
-    success_msg: "Account lockout failure threshold is correctly set to 5 or less."
+      - account_lockout_value | int <= account_lockout_threshold
+    fail_msg: "Account lockout failure threshold is set above {{ account_lockout_threshold }}, current value is {{ account_lockout_value }}."
+    success_msg: "Account lockout failure threshold is correctly set to {{ account_lockout_threshold }} or less."
   when: account_lockout_in_facts
   tags: account_lockout_check
 
@@ -39,9 +39,9 @@
     check_name: "Account Lockout Failure Threshold"
     task_result:
       changed: false
-      failed: "{{ account_lockout_value | int > 5 }}"
+      failed: "{{ account_lockout_value | int > account_lockout_threshold }}"
       msg: "Account lockout failure threshold: {{ account_lockout_value }}"
-    expected_config: "5 or fewer"
+    expected_config: "{{ account_lockout_threshold }} or fewer"
   tags: account_lockout_check
 
 - name: Display account lockout failure threshold per host
