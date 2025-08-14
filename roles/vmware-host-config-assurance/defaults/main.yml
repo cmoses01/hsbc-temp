@@ -42,3 +42,6 @@ allowed_vlans:
 
 expected_mtu: 1500
   # Set this to your environment's standard MTU (e.g. 9000 for jumbo frames, 1500 for standard).
+
+cpu_overcommit_threshold: 4           # Example: vCPU:pCPU max ratio (industry baseline often 3:1 to 6:1)[3][6]
+cpu_usage_max_pct: 80                 # Max average CPU usage percentage per physical host (%), aim for <80% for healthy ops[2]
