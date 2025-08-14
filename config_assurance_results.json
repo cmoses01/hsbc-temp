@@ -1,0 +1,337 @@
+{
+    "execution_timestamp": "2025-08-14T11:30:11Z",
+    "failed_checks": "13",
+    "hosts": [
+        {
+            "checks": {
+                "AD/LDAP/Directory Service Status": {
+                    "actual_config": "Any AD/LDAP/Directory authentication services running: False",
+                    "compliant": true,
+                    "expected_config": "No AD/LDAP/Directory authentication services running",
+                    "status": "PASS"
+                },
+                "Account Lockout Failure Threshold": {
+                    "actual_config": "Account lockout failure threshold: 5",
+                    "compliant": true,
+                    "expected_config": "5 or fewer",
+                    "status": "PASS"
+                },
+                "Authentication Mode": {
+                    "actual_config": "Authentication mode: local",
+                    "compliant": true,
+                    "expected_config": "Local authentication mode",
+                    "status": "PASS"
+                },
+                "Domain Join Status": {
+                    "actual_config": "AD joined: no, Domain: ",
+                    "compliant": true,
+                    "expected_config": "Host should not be joined to any domain",
+                    "status": "PASS"
+                },
+                "ESXi CPU Usage Baseline": {
+                    "actual_config": "Usage: 293%; Threshold: 80%",
+                    "compliant": false,
+                    "expected_config": "Average CPU usage \u2264 80%",
+                    "status": "FAIL"
+                },
+                "ESXi vCPU:pCPU Overcommit Ratio": {
+                    "actual_config": "Ratio: 0/48 = 0.0; Threshold: 4",
+                    "compliant": true,
+                    "expected_config": "vCPU:pCPU ratio \u2264 4",
+                    "status": "PASS"
+                },
+                "Host OS/Firmware Mapping Compliance": {
+                    "actual_config": "ESXi version: 8.0.2; Firmware: 6.00 (approved: ['6.30', '6.40'])",
+                    "compliant": false,
+                    "expected_config": "Firmware as mapped for ESXi version",
+                    "status": "FAIL"
+                },
+                "Host Uptime Compliance": {
+                    "actual_config": "Host uptime is 16.65 days (threshold: 90 days)",
+                    "compliant": true,
+                    "expected_config": "Uptime \u2264 90 days",
+                    "status": "PASS"
+                },
+                "Lockdown Mode Compliance": {
+                    "actual_config": "Lockdown mode: disabled (source: collected_facts)",
+                    "compliant": true,
+                    "expected_config": "disabled",
+                    "status": "PASS"
+                },
+                "NTP Configuration": {
+                    "actual_config": "Current NTP servers: 0.pool.ntp.org",
+                    "compliant": true,
+                    "expected_config": "0.pool.ntp.org",
+                    "status": "PASS"
+                },
+                "NTP Sync Status": {
+                    "actual_config": "NTP sync status: synchronized (enabled: True, protocol: ntp)",
+                    "compliant": true,
+                    "expected_config": "synchronized with configured NTP servers",
+                    "status": "PASS"
+                },
+                "Network Segmentation check": {
+                    "actual_config": "Overall segmentation compliant: NO Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "All VMkernel interfaces have approved VLAN and MTU configuration",
+                    "status": "FAIL"
+                },
+                "Time Offset Threshold": {
+                    "actual_config": "Current time drift: 0.0 seconds",
+                    "compliant": true,
+                    "expected_config": "Time offset within \u00b15 seconds",
+                    "status": "PASS"
+                },
+                "VMkernel MTU Compliance": {
+                    "actual_config": "Current MTUs: 1500 Interfaces: vmk0",
+                    "compliant": true,
+                    "expected_config": "Expected MTU: 1500",
+                    "status": "PASS"
+                },
+                "VMkernel VLAN Compliance": {
+                    "actual_config": "Current VLANs: 0 Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "Allowed VLANs: 10, 20, 30",
+                    "status": "FAIL"
+                },
+                "ad_join_validation": {
+                    "ad_auth_service_running": false,
+                    "ad_domain": "",
+                    "ad_status": "not_joined",
+                    "auth_mode": "local",
+                    "compliance_result": "pass",
+                    "compliant": true,
+                    "hostname": "esxi01.kubelab.demo",
+                    "timestamp": "2025-08-14T17:00:08+0530"
+                }
+            },
+            "failed_checks": "4",
+            "hostname": "esxi01.kubelab.demo",
+            "overall_compliant": false,
+            "passed_checks": "12",
+            "total_checks": "16"
+        },
+        {
+            "checks": {
+                "AD/LDAP/Directory Service Status": {
+                    "actual_config": "Any AD/LDAP/Directory authentication services running: False",
+                    "compliant": true,
+                    "expected_config": "No AD/LDAP/Directory authentication services running",
+                    "status": "PASS"
+                },
+                "Account Lockout Failure Threshold": {
+                    "actual_config": "Account lockout failure threshold: 5",
+                    "compliant": true,
+                    "expected_config": "5 or fewer",
+                    "status": "PASS"
+                },
+                "Authentication Mode": {
+                    "actual_config": "Authentication mode: local",
+                    "compliant": true,
+                    "expected_config": "Local authentication mode",
+                    "status": "PASS"
+                },
+                "Domain Join Status": {
+                    "actual_config": "AD joined: no, Domain: ",
+                    "compliant": true,
+                    "expected_config": "Host should not be joined to any domain",
+                    "status": "PASS"
+                },
+                "ESXi CPU Usage Baseline": {
+                    "actual_config": "Usage: 83%; Threshold: 80%",
+                    "compliant": false,
+                    "expected_config": "Average CPU usage \u2264 80%",
+                    "status": "FAIL"
+                },
+                "ESXi vCPU:pCPU Overcommit Ratio": {
+                    "actual_config": "Ratio: 0/48 = 0.0; Threshold: 4",
+                    "compliant": true,
+                    "expected_config": "vCPU:pCPU ratio \u2264 4",
+                    "status": "PASS"
+                },
+                "Host OS/Firmware Mapping Compliance": {
+                    "actual_config": "ESXi version: 8.0.2; Firmware: 6.00 (approved: ['6.30', '6.40'])",
+                    "compliant": false,
+                    "expected_config": "Firmware as mapped for ESXi version",
+                    "status": "FAIL"
+                },
+                "Host Uptime Compliance": {
+                    "actual_config": "Host uptime is 14.52 days (threshold: 90 days)",
+                    "compliant": true,
+                    "expected_config": "Uptime \u2264 90 days",
+                    "status": "PASS"
+                },
+                "Lockdown Mode Compliance": {
+                    "actual_config": "Lockdown mode: normal (source: collected_facts)",
+                    "compliant": false,
+                    "expected_config": "disabled",
+                    "status": "FAIL"
+                },
+                "NTP Configuration": {
+                    "actual_config": "Current NTP servers: 0.pool.ntp.org",
+                    "compliant": true,
+                    "expected_config": "0.pool.ntp.org",
+                    "status": "PASS"
+                },
+                "NTP Sync Status": {
+                    "actual_config": "NTP sync status: synchronized (enabled: True, protocol: ntp)",
+                    "compliant": true,
+                    "expected_config": "synchronized with configured NTP servers",
+                    "status": "PASS"
+                },
+                "Network Segmentation check": {
+                    "actual_config": "Overall segmentation compliant: NO Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "All VMkernel interfaces have approved VLAN and MTU configuration",
+                    "status": "FAIL"
+                },
+                "Time Offset Threshold": {
+                    "actual_config": "Current time drift: 0.0 seconds",
+                    "compliant": true,
+                    "expected_config": "Time offset within \u00b15 seconds",
+                    "status": "PASS"
+                },
+                "VMkernel MTU Compliance": {
+                    "actual_config": "Current MTUs: 1500 Interfaces: vmk0",
+                    "compliant": true,
+                    "expected_config": "Expected MTU: 1500",
+                    "status": "PASS"
+                },
+                "VMkernel VLAN Compliance": {
+                    "actual_config": "Current VLANs: 0 Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "Allowed VLANs: 10, 20, 30",
+                    "status": "FAIL"
+                },
+                "ad_join_validation": {
+                    "ad_auth_service_running": false,
+                    "ad_domain": "",
+                    "ad_status": "not_joined",
+                    "auth_mode": "local",
+                    "compliance_result": "pass",
+                    "compliant": true,
+                    "hostname": "esxi02.kubelab.demo",
+                    "timestamp": "2025-08-14T17:00:08+0530"
+                }
+            },
+            "failed_checks": "5",
+            "hostname": "esxi02.kubelab.demo",
+            "overall_compliant": false,
+            "passed_checks": "11",
+            "total_checks": "16"
+        },
+        {
+            "checks": {
+                "AD/LDAP/Directory Service Status": {
+                    "actual_config": "Any AD/LDAP/Directory authentication services running: False",
+                    "compliant": true,
+                    "expected_config": "No AD/LDAP/Directory authentication services running",
+                    "status": "PASS"
+                },
+                "Account Lockout Failure Threshold": {
+                    "actual_config": "Account lockout failure threshold: 5",
+                    "compliant": true,
+                    "expected_config": "5 or fewer",
+                    "status": "PASS"
+                },
+                "Authentication Mode": {
+                    "actual_config": "Authentication mode: local",
+                    "compliant": true,
+                    "expected_config": "Local authentication mode",
+                    "status": "PASS"
+                },
+                "Domain Join Status": {
+                    "actual_config": "AD joined: no, Domain: ",
+                    "compliant": true,
+                    "expected_config": "Host should not be joined to any domain",
+                    "status": "PASS"
+                },
+                "ESXi CPU Usage Baseline": {
+                    "actual_config": "Usage: 76%; Threshold: 80%",
+                    "compliant": true,
+                    "expected_config": "Average CPU usage \u2264 80%",
+                    "status": "PASS"
+                },
+                "ESXi vCPU:pCPU Overcommit Ratio": {
+                    "actual_config": "Ratio: 0/48 = 0.0; Threshold: 4",
+                    "compliant": true,
+                    "expected_config": "vCPU:pCPU ratio \u2264 4",
+                    "status": "PASS"
+                },
+                "Host OS/Firmware Mapping Compliance": {
+                    "actual_config": "ESXi version: 8.0.2; Firmware: 6.00 (approved: ['6.30', '6.40'])",
+                    "compliant": false,
+                    "expected_config": "Firmware as mapped for ESXi version",
+                    "status": "FAIL"
+                },
+                "Host Uptime Compliance": {
+                    "actual_config": "Host uptime is 14.52 days (threshold: 90 days)",
+                    "compliant": true,
+                    "expected_config": "Uptime \u2264 90 days",
+                    "status": "PASS"
+                },
+                "Lockdown Mode Compliance": {
+                    "actual_config": "Lockdown mode: normal (source: collected_facts)",
+                    "compliant": false,
+                    "expected_config": "disabled",
+                    "status": "FAIL"
+                },
+                "NTP Configuration": {
+                    "actual_config": "Current NTP servers: 0.pool.ntp.org",
+                    "compliant": true,
+                    "expected_config": "0.pool.ntp.org",
+                    "status": "PASS"
+                },
+                "NTP Sync Status": {
+                    "actual_config": "NTP sync status: synchronized (enabled: True, protocol: ntp)",
+                    "compliant": true,
+                    "expected_config": "synchronized with configured NTP servers",
+                    "status": "PASS"
+                },
+                "Network Segmentation check": {
+                    "actual_config": "Overall segmentation compliant: NO Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "All VMkernel interfaces have approved VLAN and MTU configuration",
+                    "status": "FAIL"
+                },
+                "Time Offset Threshold": {
+                    "actual_config": "Current time drift: 0.0 seconds",
+                    "compliant": true,
+                    "expected_config": "Time offset within \u00b15 seconds",
+                    "status": "PASS"
+                },
+                "VMkernel MTU Compliance": {
+                    "actual_config": "Current MTUs: 1500 Interfaces: vmk0",
+                    "compliant": true,
+                    "expected_config": "Expected MTU: 1500",
+                    "status": "PASS"
+                },
+                "VMkernel VLAN Compliance": {
+                    "actual_config": "Current VLANs: 0 Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "Allowed VLANs: 10, 20, 30",
+                    "status": "FAIL"
+                },
+                "ad_join_validation": {
+                    "ad_auth_service_running": false,
+                    "ad_domain": "",
+                    "ad_status": "not_joined",
+                    "auth_mode": "local",
+                    "compliance_result": "pass",
+                    "compliant": true,
+                    "hostname": "esxi03.kubelab.demo",
+                    "timestamp": "2025-08-14T17:00:08+0530"
+                }
+            },
+            "failed_checks": "4",
+            "hostname": "esxi03.kubelab.demo",
+            "overall_compliant": false,
+            "passed_checks": "12",
+            "total_checks": "16"
+        }
+    ],
+    "overall_compliance": false,
+    "passed_checks": "35",
+    "total_checks": "48",
+    "total_hosts": "3"
+}

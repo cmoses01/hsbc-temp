@@ -16,3 +16,32 @@ ntp_servers:
 
 # Time offset threshold in seconds
 time_offset_threshold: 5  # Maximum acceptable time drift in seconds
+
+# Account lockout failure threshold (e.g. max failed login attempts allowed)
+account_lockout_threshold: 5 # Maximum allowed failed login attempts before account lockout
+
+# host uptime check
+patch_cycle_threshold_days: 90 # Maximum allowed uptime in days before patching is required
+
+# approved_firmware_versions:
+#  - "6.00"
+#  - "2.0.0.1"
+#  - "3.1.4.1"
+# Add all approved firmware versions here
+
+esxi_firmware_approval_map:
+  "7.0": ["6.00", "6.01"]
+  "7.1": ["6.20"]
+  "8.0": ["6.30", "6.40"]
+
+allowed_vlans:
+  - 10
+  - 20
+  - 30
+  # Add all VLAN IDs you wish to allow for segmentation compliance.
+
+expected_mtu: 1500
+  # Set this to your environment's standard MTU (e.g. 9000 for jumbo frames, 1500 for standard).
+
+cpu_overcommit_threshold: 4           # Example: vCPU:pCPU max ratio (industry baseline often 3:1 to 6:1)[3][6]
+cpu_usage_max_pct: 80                 # Max average CPU usage percentage per physical host (%), aim for <80% for healthy ops[2]

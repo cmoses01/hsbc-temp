@@ -22,6 +22,28 @@
   include_tasks: checks/new_ad_join_check.yml
   when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
 
+- name: Include Network Segmentation check
+  include_tasks: checks/network_segmentation_check.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+
+- name: Include account lockout check
+  include_tasks: checks/account_lockout_check.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+ 
+- name: Include host uptime compliance check
+  include_tasks: checks/host_uptime_check.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+  tags: host_uptime_check
+
+- name: Include host firmware compliance check
+  include_tasks: checks/firmware_version_check.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+  tags: host_firmware_check
+
+- name: Include CPU Threshold check
+  include_tasks: checks/cpu_threshold_check.yml
+  when: inventory_hostname in groups.get('discovered_esxi_hosts', [])
+
 - name: Finalize host results for JSON output
   set_fact:
     host_assurance_result:

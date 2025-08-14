@@ -1,0 +1,48 @@
+---
+- name: Check if firmware info is available in collected facts
+  set_fact:
+    firmware_in_facts: >-
+      {{
+        collected_host_facts is defined and
+        collected_host_facts.hardware is defined and
+        collected_host_facts.hardware.biosInfo is defined and
+        collected_host_facts.hardware.biosInfo.biosVersion is defined
+      }}
+  tags: host_firmware_check
+
+- name: Fail if firmware info not found in collected facts
+  fail:
+    msg: "Firmware info not found in collected_host_facts. Please ensure 'hardware.biosInfo.biosVersion' is collected by vmware_host_facts module."
+  when: not firmware_in_facts
+  tags: host_firmware_check
+
+- name: Set current firmware version fact
+  set_fact:
+    current_firmware_version: "{{ collected_host_facts.hardware.biosInfo.biosVersion }}"
+  when: firmware_in_facts
+  tags: host_firmware_check
+
+- name: Check firmware compliance against approved versions
+  set_fact:
+    firmware_compliant: "{{ current_firmware_version in approved_firmware_versions }}"
+  when: firmware_in_facts
+  tags: host_firmware_check
+
+- name: Report Host Firmware Compliance
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "Host Firmware Compliance"
+    task_result:
+      changed: false
+      failed: "{{ not firmware_compliant }}"
+      msg: >-
+        Firmware version is {{ current_firmware_version }} (approved versions: {{ approved_firmware_versions | join(', ') }})
+    expected_config: "Firmware version in approved list"
+  when: firmware_in_facts
+  tags: host_firmware_check
+
+- name: Display host firmware version per host
+  debug:
+    msg: "{{ inventory_hostname }}: Firmware version {{ current_firmware_version }}"
+  when: firmware_in_facts
+  tags: host_firmware_check
