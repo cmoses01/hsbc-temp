@@ -34,3 +34,11 @@ esxi_firmware_approval_map:
   "7.1": ["6.20"]
   "8.0": ["6.30", "6.40"]
 
+allowed_vlans:
+  - 10
+  - 20
+  - 30
+  # Add all VLAN IDs you wish to allow for segmentation compliance.
+
+expected_mtu: 1500
+  # Set this to your environment's standard MTU (e.g. 9000 for jumbo frames, 1500 for standard).

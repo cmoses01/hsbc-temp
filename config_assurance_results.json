@@ -1,6 +1,6 @@
 {
-    "execution_timestamp": "2025-08-11T11:16:47Z",
-    "failed_checks": "5",
+    "execution_timestamp": "2025-08-14T08:06:56Z",
+    "failed_checks": "11",
     "hosts": [
         {
             "checks": {
@@ -35,7 +35,7 @@
                     "status": "FAIL"
                 },
                 "Host Uptime Compliance": {
-                    "actual_config": "Host uptime is 13.64 days (threshold: 90 days)",
+                    "actual_config": "Host uptime is 16.51 days (threshold: 90 days)",
                     "compliant": true,
                     "expected_config": "Uptime \u2264 90 days",
                     "status": "PASS"
@@ -58,11 +58,29 @@
                     "expected_config": "synchronized with configured NTP servers",
                     "status": "PASS"
                 },
+                "Network Segmentation check": {
+                    "actual_config": "Overall segmentation compliant: NO Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "All VMkernel interfaces have approved VLAN and MTU configuration",
+                    "status": "FAIL"
+                },
                 "Time Offset Threshold": {
                     "actual_config": "Current time drift: 0.0 seconds",
                     "compliant": true,
                     "expected_config": "Time offset within \u00b15 seconds",
                     "status": "PASS"
+                },
+                "VMkernel MTU Compliance": {
+                    "actual_config": "Current MTUs: 1500 Interfaces: vmk0",
+                    "compliant": true,
+                    "expected_config": "Expected MTU: 1500",
+                    "status": "PASS"
+                },
+                "VMkernel VLAN Compliance": {
+                    "actual_config": "Current VLANs: 0 Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "Allowed VLANs: 10, 20, 30",
+                    "status": "FAIL"
                 },
                 "ad_join_validation": {
                     "ad_auth_service_running": false,
@@ -72,14 +90,14 @@
                     "compliance_result": "pass",
                     "compliant": true,
                     "hostname": "esxi01.kubelab.demo",
-                    "timestamp": "2025-08-11T16:46:45+0530"
+                    "timestamp": "2025-08-14T13:36:52+0530"
                 }
             },
-            "failed_checks": "1",
+            "failed_checks": "3",
             "hostname": "esxi01.kubelab.demo",
             "overall_compliant": false,
-            "passed_checks": "10",
-            "total_checks": "11"
+            "passed_checks": "11",
+            "total_checks": "14"
         },
         {
             "checks": {
@@ -114,7 +132,7 @@
                     "status": "FAIL"
                 },
                 "Host Uptime Compliance": {
-                    "actual_config": "Host uptime is 11.51 days (threshold: 90 days)",
+                    "actual_config": "Host uptime is 14.38 days (threshold: 90 days)",
                     "compliant": true,
                     "expected_config": "Uptime \u2264 90 days",
                     "status": "PASS"
@@ -137,11 +155,29 @@
                     "expected_config": "synchronized with configured NTP servers",
                     "status": "PASS"
                 },
+                "Network Segmentation check": {
+                    "actual_config": "Overall segmentation compliant: NO Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "All VMkernel interfaces have approved VLAN and MTU configuration",
+                    "status": "FAIL"
+                },
                 "Time Offset Threshold": {
                     "actual_config": "Current time drift: 0.0 seconds",
                     "compliant": true,
                     "expected_config": "Time offset within \u00b15 seconds",
                     "status": "PASS"
+                },
+                "VMkernel MTU Compliance": {
+                    "actual_config": "Current MTUs: 1500 Interfaces: vmk0",
+                    "compliant": true,
+                    "expected_config": "Expected MTU: 1500",
+                    "status": "PASS"
+                },
+                "VMkernel VLAN Compliance": {
+                    "actual_config": "Current VLANs: 0 Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "Allowed VLANs: 10, 20, 30",
+                    "status": "FAIL"
                 },
                 "ad_join_validation": {
                     "ad_auth_service_running": false,
@@ -151,14 +187,14 @@
                     "compliance_result": "pass",
                     "compliant": true,
                     "hostname": "esxi02.kubelab.demo",
-                    "timestamp": "2025-08-11T16:46:45+0530"
+                    "timestamp": "2025-08-14T13:36:52+0530"
                 }
             },
-            "failed_checks": "2",
+            "failed_checks": "4",
             "hostname": "esxi02.kubelab.demo",
             "overall_compliant": false,
-            "passed_checks": "9",
-            "total_checks": "11"
+            "passed_checks": "10",
+            "total_checks": "14"
         },
         {
             "checks": {
@@ -193,7 +229,7 @@
                     "status": "FAIL"
                 },
                 "Host Uptime Compliance": {
-                    "actual_config": "Host uptime is 11.51 days (threshold: 90 days)",
+                    "actual_config": "Host uptime is 14.38 days (threshold: 90 days)",
                     "compliant": true,
                     "expected_config": "Uptime \u2264 90 days",
                     "status": "PASS"
@@ -216,11 +252,29 @@
                     "expected_config": "synchronized with configured NTP servers",
                     "status": "PASS"
                 },
+                "Network Segmentation check": {
+                    "actual_config": "Overall segmentation compliant: NO Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "All VMkernel interfaces have approved VLAN and MTU configuration",
+                    "status": "FAIL"
+                },
                 "Time Offset Threshold": {
                     "actual_config": "Current time drift: 0.0 seconds",
                     "compliant": true,
                     "expected_config": "Time offset within \u00b15 seconds",
                     "status": "PASS"
+                },
+                "VMkernel MTU Compliance": {
+                    "actual_config": "Current MTUs: 1500 Interfaces: vmk0",
+                    "compliant": true,
+                    "expected_config": "Expected MTU: 1500",
+                    "status": "PASS"
+                },
+                "VMkernel VLAN Compliance": {
+                    "actual_config": "Current VLANs: 0 Interfaces: vmk0",
+                    "compliant": false,
+                    "expected_config": "Allowed VLANs: 10, 20, 30",
+                    "status": "FAIL"
                 },
                 "ad_join_validation": {
                     "ad_auth_service_running": false,
@@ -230,18 +284,18 @@
                     "compliance_result": "pass",
                     "compliant": true,
                     "hostname": "esxi03.kubelab.demo",
-                    "timestamp": "2025-08-11T16:46:45+0530"
+                    "timestamp": "2025-08-14T13:36:52+0530"
                 }
             },
-            "failed_checks": "2",
+            "failed_checks": "4",
             "hostname": "esxi03.kubelab.demo",
             "overall_compliant": false,
-            "passed_checks": "9",
-            "total_checks": "11"
+            "passed_checks": "10",
+            "total_checks": "14"
         }
     ],
     "overall_compliance": false,
-    "passed_checks": "28",
-    "total_checks": "33",
+    "passed_checks": "31",
+    "total_checks": "42",
     "total_hosts": "3"
 }
