@@ -1,0 +1,91 @@
+- name: Extract VMkernel interfaces, portgroups, vSwitches from collected facts
+  set_fact:
+    vmk_interfaces: "{{ collected_host_facts.config.network.vnic | default([]) }}"
+    portgroups: "{{ collected_host_facts.config.network.portgroup | default([]) }}"
+    vswitches: "{{ collected_host_facts.config.network.vswitch | default([]) }}"
+  tags: network_segmentation
+ 
+- name: Build VMkernel segmentation evidence for each interface
+  set_fact:
+    vmk_segmentation_report: "{{ _vmk_segmentation_report }}"
+  vars:
+    _vmk_segmentation_report: |
+      {% set out = [] %}
+      {% for vmk in vmk_interfaces %}
+        {% set pg = (portgroups | selectattr('spec.name', 'equalto', vmk.get('portgroup', '')) | list | first | default({})) %}
+        {% set vsw_name = pg.get('spec', {}).get('vswitchName', 'unknown') %}
+        {% set vsw = (vswitches | selectattr('name', 'equalto', vsw_name) | list | first | default({})) %}
+        {% set vlan_id = pg.get('spec', {}).get('vlanId', 'unknown') %}
+        {% set mtu = vsw.get('mtu', 'unknown') %}
+        {% set row = {
+            'vmk': vmk.get('device', ''),
+            'ip': vmk.get('spec', {}).get('ip', {}).get('ipAddress', ''),
+            'vswitch': vsw_name,
+            'portgroup': vmk.get('portgroup', ''),
+            'mtu': mtu,
+            'vlan_id': vlan_id
+          } %}
+        {{ out.append(row) }}
+      {% endfor %}
+      {{ out }}
+  tags: network_segmentation
+ 
+- name: Ensure segmentation report is a list
+  set_fact:
+    vmk_segmentation_report: "{{ vmk_segmentation_report | from_yaml }}"
+  when: vmk_segmentation_report is string
+  tags: network_segmentation
+ 
+- name: Check VLAN compliance
+  set_fact:
+    vlan_compliant: "{{ vmk_segmentation_report | map(attribute='vlan_id') | map('int', default=-1) | reject('in', allowed_vlans | default([0])) | list | length == 0 }}"
+  tags: network_segmentation
+ 
+- name: Report VLAN compliance result
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "VMkernel VLAN Compliance"
+    task_result:
+      changed: false
+      failed: "{{ not vlan_compliant }}"
+      msg: >-
+        Current VLANs: {{ vmk_segmentation_report | map(attribute='vlan_id') | list | join(', ') or 'None' }}
+        Interfaces: {{ vmk_segmentation_report | map(attribute='vmk') | list | join(', ') }}
+    expected_config: "Allowed VLANs: {{ allowed_vlans | join(', ') }}"
+  tags: network_segmentation
+ 
+- name: Check MTU compliance
+  set_fact:
+    mtu_compliant: "{{ vmk_segmentation_report | map(attribute='mtu') | map('int', default=-1) | reject('equalto', expected_mtu | default(1500)) | list | length == 0 }}"
+  tags: network_segmentation
+ 
+- name: Report MTU compliance result
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "VMkernel MTU Compliance"
+    task_result:
+      changed: false
+      failed: "{{ not mtu_compliant }}"
+      msg: >-
+        Current MTUs: {{ vmk_segmentation_report | map(attribute='mtu') | list | join(', ') or 'None' }}
+        Interfaces: {{ vmk_segmentation_report | map(attribute='vmk') | list | join(', ') }}
+    expected_config: "Expected MTU: {{ expected_mtu }}"
+  tags: network_segmentation
+ 
+- name: Check overall segmentation compliance
+  set_fact:
+    segmentation_compliant: "{{ vlan_compliant and mtu_compliant }}"
+  tags: network_segmentation
+ 
+- name: Report overall network segmentation result
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "Network Segmentation check"
+    task_result:
+      changed: false
+      failed: "{{ not segmentation_compliant }}"
+      msg: >-
+        Overall segmentation compliant: {{ 'YES' if segmentation_compliant else 'NO' }}
+        Interfaces: {{ vmk_segmentation_report | map(attribute='vmk') | list | join(', ') }}
+    expected_config: "All VMkernel interfaces have approved VLAN and MTU configuration"
+  tags: network_segmentation

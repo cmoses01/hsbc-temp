@@ -1,0 +1,44 @@
+- name: Collect CPU facts from ESXi host
+  set_fact:
+    esxi_pcpus: "{{ collected_host_facts.summary.hardware.numCpuCores | default(0) }}"
+    esxi_vcpus: "{{ (collected_host_facts.summary.config.numVirtualCPUs | default(0)) + 0 }}"
+    esxi_cpu_usage_pct: "{{ collected_host_facts.summary.quickStats.overallCpuUsage | default(0) }}"
+  tags: cpu_overcommit
+
+- name: Calculate vCPU to pCPU ratio
+  set_fact:
+    esxi_vcpu_pcpu_ratio: "{{ (esxi_vcpus | float) / (esxi_pcpus | float) if esxi_pcpus|float > 0 else 0 }}"
+  tags: cpu_overcommit
+
+- name: Assess baseline CPU overcommit compliance
+  set_fact:
+    cpu_overcommit_compliant: "{{ (esxi_vcpu_pcpu_ratio | float) <= (cpu_overcommit_threshold | float) }}"
+    cpu_usage_compliant: "{{ (esxi_cpu_usage_pct | float) <= (cpu_usage_max_pct | float) }}"
+  tags: cpu_overcommit
+
+
+- name: Report vCPU:pCPU ratio compliance
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "ESXi vCPU:pCPU Overcommit Ratio"
+    task_result:
+      changed: false
+      failed: "{{ not cpu_overcommit_compliant }}"
+      msg: >-
+        Ratio: {{ esxi_vcpus }}/{{ esxi_pcpus }} = {{ esxi_vcpu_pcpu_ratio | float | round(2) }};
+        Threshold: {{ cpu_overcommit_threshold }}
+    expected_config: "vCPU:pCPU ratio ≤ {{ cpu_overcommit_threshold }}"
+  tags: cpu_overcommit
+
+
+- name: Report CPU usage compliance
+  include_tasks: utils/report_assurance_result.yml
+  vars:
+    check_name: "ESXi CPU Usage Baseline"
+    task_result:
+      changed: false
+      failed: "{{ not cpu_usage_compliant }}"
+      msg: >-
+        Usage: {{ esxi_cpu_usage_pct }}%; Threshold: {{ cpu_usage_max_pct }}%
+    expected_config: "Average CPU usage ≤ {{ cpu_usage_max_pct }}%"
+  tags: cpu_overcommit

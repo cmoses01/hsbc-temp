@@ -18,6 +18,7 @@
       - config.authenticationManagerInfo
       - summary.quickStats
       - hardware.biosInfo
+      - config.network
   register: host_facts_async
   delegate_to: localhost
   async: 300
